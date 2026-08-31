@@ -1,0 +1,15 @@
+{
+  "teachers": [
+    {"id": 1, "first_name": "Marcelo", "last_name": "Alvarado"},
+    {"id": 2, "first_name": "Claudia", "last_name": "González"}
+  ],
+  "courses": [
+    {"id": 1, "name": "Programación Backend", "teacher_id": 1, "teacher_name": "Marcelo Alvarado"},
+    {"id": 2, "name": "Bases de Datos Avanzadas", "teacher_id": 2, "teacher_name": "Claudia González"}
+  ],
+  "students": [
+    {"id": 1, "first_name": "Jorge", "last_name": "González"},
+    {"id": 2, "first_name": "Ana", "last_name": "Martínez"},
+    {"id": 3, "first_name": "Carlos", "last_name": "Pérez"}
+  ]
+}

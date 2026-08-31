@@ -1,0 +1,70 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}Cursos | Gestión Académica{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 text-primary">Listado de Asignaturas</h4>
+        <button class="btn btn-outline-primary btn-sm" onclick="fetchCourses()">Actualizar Datos</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th># ID</th>
+                        <th>Nombre de Asignatura</th>
+                        <th>Docente Asignado</th>
+                    </tr>
+                </thead>
+                <tbody id="courses-table-body">
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div> Cargando datos desde la API...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Función asíncrona para consumir el endpoint DRF
+    async function fetchCourses() {
+        const tbody = document.getElementById('courses-table-body');
+        try {
+            const response = await fetch('/api/courses/');
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            const data = await response.json();
+            
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No existen asignaturas registradas.</td></tr>';
+                return;
+            }
+
+            data.forEach(course => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold">${course.id}</td>
+                    <td>${course.name}</td>
+                    <td><span class="badge bg-info text-dark">${course.teacher_name || 'Sin asignar'}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Error al obtener cursos:', error);
+            tbody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">Error al cargar datos desde la API.</td></tr>`;
+        }
+    }
+
+    // Ejecución inicial al cargar el DOM
+    document.addEventListener('DOMContentLoaded', fetchCourses);
+</script>
+{% endblock %}
